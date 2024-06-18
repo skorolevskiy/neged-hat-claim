@@ -21,13 +21,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
 
     // Check if user has liked and recasted
-    // const hasLikedAndRecasted =
-    //   !!status?.action?.cast?.viewer_context?.liked &&
-    //   !!status?.action?.cast?.viewer_context?.recasted;
+    const hasLikedAndRecasted =
+      !!status?.action?.cast?.viewer_context?.liked &&
+      !!status?.action?.cast?.viewer_context?.recasted;
 
-    // if (!hasLikedAndRecasted) {
-    //   return getResponse(ResponseType.RECAST);
-    // }
+    if (!hasLikedAndRecasted) {
+      return getResponse(ResponseType.RECAST);
+    }
 
     // Check if user has liked and recasted
     const userFollow = await userInfo(Number(fid_new));

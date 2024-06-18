@@ -92,7 +92,7 @@ function getResponse(type: ResponseType) {
     ${
       shouldRetry
         ? `<meta property="fc:frame:button:1" content="Try again" />
-				    <meta name="fc:frame:button:2" content="Buy PILL" />
+				    <meta name="fc:frame:button:2" content="Buy Neged" />
         		<meta name="fc:frame:button:2:action" content="link" />
         		<meta name="fc:frame:button:2:target" content="https://app.uniswap.org/swap?chain=base&inputCurrency=ETH&outputCurrency=0x4229c271c19ca5f319fb67b4bc8a40761a6d6299" />
 				`

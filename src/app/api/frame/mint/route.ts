@@ -55,19 +55,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Check if user has an address connected
     const address1: Address | undefined =
         status?.action?.interactor?.verifications?.[0];
-    const address2: Address | undefined =
-        status?.action?.interactor?.verifications?.[1];
 
-    let rawBalance1: any, rawBalance2: any;
-    let balance1: bigint;
-    let balance2: bigint;
     if (!address1) {
         return getResponse(ResponseType.NO_ADDRESS);
     }
 
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
-    const power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
-    let address: string, recieveDrop: boolean;
+    let recieveDrop: boolean;
 
     const User = await getUser(fid_new);
     let wallet;
@@ -81,7 +75,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   
     if (recieveDrop) {
-        return getResponse(ResponseType.ALREADY_MINTED);
+      return getResponse(ResponseType.ALREADY_MINTED);
     }
 
     const data: FidEntry[] = dataJson;
@@ -89,11 +83,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     position = findFidPosition(data, Number(fid_new));
 
     if (position !== false) {
-        const numberPosition: number = position;
-        if (numberPosition > 500) {
-            tokens = 2000;
-        }
-    }
+			const numberPosition:number = position;
+			tokens = getPrize(numberPosition);
+		}
 
     let tokensString = JSON.stringify(tokens);
 
@@ -144,17 +136,17 @@ enum ResponseType {
 
 function getResponse(type: ResponseType) {
   const IMAGE = {
-    [ResponseType.SUCCESS]: 'status/congrats.gif',
-    [ResponseType.ERROR]: 'status/error.png',
-    [ResponseType.NEED_TOKEN]: 'status/need-token.png',
-    [ResponseType.NO_ADDRESS]: 'status/no-address.png',
-    [ResponseType.ALREADY_MINTED]: 'status/congrats.gif',
+    [ResponseType.SUCCESS]: 'https://gateway.lighthouse.storage/ipfs/bafybeihp5u7vdjr63n7xymmfhojv2ibaspnrxxqtvhdjhr2y4fcwob7k64',
+    [ResponseType.ERROR]: SITE_URL + '/status/error.png',
+    [ResponseType.NEED_TOKEN]: SITE_URL + '/status/need-token.png',
+    [ResponseType.NO_ADDRESS]: SITE_URL + '/status/no-address.png',
+    [ResponseType.ALREADY_MINTED]: 'https://gateway.lighthouse.storage/ipfs/bafybeihp5u7vdjr63n7xymmfhojv2ibaspnrxxqtvhdjhr2y4fcwob7k64',
   }[type];
   const shouldRetry =
     type === ResponseType.ERROR || type === ResponseType.ALREADY_MINTED;
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
+    <meta property="fc:frame:image" content="${IMAGE}" />
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
     ${
@@ -191,3 +183,35 @@ const findFidPosition = (data: FidEntry[], fidToFind: number): number | false =>
 	const index = data.findIndex(entry => entry.fid === fidToFind);
 	return index !== -1 ? index : false;
   };
+
+  function getPrize(position: number): number {
+    if (position === 1) {
+        return 1000000;
+    } else if (position === 2) {
+        return 250000;
+    } else if (position === 3) {
+        return 100000;
+    } else if (position === 4) {
+        return 75000;
+    } else if (position === 5) {
+        return 50000;
+    } else if (position === 6) {
+        return 40000;
+    } else if (position === 7) {
+        return 30000;
+    } else if (position === 8) {
+        return 20000;
+    } else if (position === 9) {
+        return 10000;
+    } else if (position === 10) {
+        return 5000;
+    } else if (position >= 11 && position <= 1000) {
+        return 3000;
+    } else if (position >= 1001 && position <= 3000) {
+        return 1500;
+    } else if (position >= 3001 && position <= 5000) {
+        return 1000;
+    } else {
+        return 0;
+    }
+}

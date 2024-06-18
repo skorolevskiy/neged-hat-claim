@@ -38,9 +38,7 @@ export async function GET(request: Request) {
 
 		if (position !== false) {
 			numberPosition = position;
-			if (numberPosition > 500) {
-				tokens = 2000;
-			}
+			tokens = getPrize(numberPosition);
 		}
 
 		return new ImageResponse(
@@ -50,7 +48,7 @@ export async function GET(request: Request) {
 						fontFamily: 'Nanum Pen, Inter, "Material Icons"',
 						fontSize: 40,
 						color: 'black',
-						background: '#0052FF',
+						background: '#fff',
 						width: '100%',
 						height: '100%',
 						padding: '50px 50px',
@@ -65,11 +63,10 @@ export async function GET(request: Request) {
 					<div
 						style={{
 							fontFamily: 'Nanum Pen, Inter, "Material Icons"',
-							fontSize: 60,
+							fontSize: 100,
 							fontStyle: 'normal',
 							fontWeight: 700,
-							letterSpacing: '-0.025em',
-							color: 'white',
+							color: '#8a60f4',
 							lineHeight: 1,
 							whiteSpace: 'pre-wrap',
 						}}
@@ -80,17 +77,17 @@ export async function GET(request: Request) {
                     <div
                         style={{
                             fontFamily: 'Nanum Pen, Inter, "Material Icons"',
-                            fontSize: 40,
+                            fontSize: 80,
                             fontStyle: 'normal',
                             fontWeight: 700,
                             letterSpacing: '-0.025em',
-                            color: 'white',
+                            color: 'black',
                             lineHeight: 1,
                             whiteSpace: 'pre-wrap',
                             display: 'flex',
                             flexDirection: 'column',
-                            width: '620px',
-                            gap: '24px'
+                            width: '720px',
+                            gap: '16px'
                         }}
                     >
                         <div style={{
@@ -98,7 +95,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your fid:</div> 
+                            <div style={{display: 'flex',}}>Your <span style={{color: '#8a60f4',}}>fid</span>:</div> 
                             <div style={{display: 'flex',}}>{fid}</div>
                         </div>
 
@@ -116,7 +113,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your points:</div>
+                            <div style={{display: 'flex',}}>Your <span style={{color: '#8a60f4',}}>points</span>:</div>
                             <div style={{display: 'flex',}}>{points}</div>
                         </div> 
 
@@ -125,7 +122,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your place:</div>
+                            <div style={{display: 'flex',}}>Your <span style={{color: '#8a60f4',}}>place</span>:</div>
                             <div style={{display: 'flex',}}>{position}</div>
                         </div>
 
@@ -136,7 +133,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Tokens be received:</div>
+                            <div style={{display: 'flex',}}><span style={{color: '#8a60f4',}}>Tokens</span> be <span style={{color: '#8a60f4',}}>received</span>:</div>
                             <div style={{display: 'flex',}}>{tokens}</div>
                         </div>
                         
@@ -149,15 +146,14 @@ export async function GET(request: Request) {
 							alignItems: 'center',
 							width: '100%',
 							fontFamily: 'Nanum Pen, Inter, "Material Icons"',
-							fontSize: 20,
+							fontSize: 40,
 							fontStyle: 'normal',
-							letterSpacing: '-0.025em',
-							color: 'white',
+							color: 'black',
 							lineHeight: 1.4,
 							whiteSpace: 'pre-wrap',
 						}}
 					>
-						<p>Build by Neged, dev @eat</p>
+						<p>Build by <span style={{color: '#8a60f4',}}>Neged</span>, dev <span style={{color: '#8a60f4',}}>@eat</span></p>
 						<img
 							alt="pill"
 							width="64"
@@ -191,3 +187,35 @@ const findFidPosition = (data: FidEntry[], fidToFind: number): number | false =>
 	const index = data.findIndex(entry => entry.fid === fidToFind);
 	return index !== -1 ? index : false;
   };
+
+  function getPrize(position: number): number {
+    if (position === 1) {
+        return 1000000;
+    } else if (position === 2) {
+        return 250000;
+    } else if (position === 3) {
+        return 100000;
+    } else if (position === 4) {
+        return 75000;
+    } else if (position === 5) {
+        return 50000;
+    } else if (position === 6) {
+        return 40000;
+    } else if (position === 7) {
+        return 30000;
+    } else if (position === 8) {
+        return 20000;
+    } else if (position === 9) {
+        return 10000;
+    } else if (position === 10) {
+        return 5000;
+    } else if (position >= 11 && position <= 1000) {
+        return 3000;
+    } else if (position >= 1001 && position <= 3000) {
+        return 1500;
+    } else if (position >= 3001 && position <= 5000) {
+        return 1000;
+    } else {
+        return 0;
+    }
+}
